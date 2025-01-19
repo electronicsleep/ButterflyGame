@@ -5,8 +5,11 @@ Teaching Python to my daughter using some of the artwork she created from school
 Install
 
 ```
+# MacOS
+pip3 install pgzero
+
 # Linux
-bash setup.sh
+apt-get install python3-pgzero
 
 pip3 install -r requirements.txt
 ```
