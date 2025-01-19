@@ -1,7 +1,7 @@
 from rich import print
 
 background = Actor('background')
-background.pos = 600,300
+background.pos = 600,400
 
 butterfly = Actor('butterfly')
 butterfly.pos = 100, 100
@@ -55,5 +55,7 @@ def update():
         print(f"[green]INFO: left[/green]")
         butterfly.left -= 1
         background.right += 1
+    else:
+        butterfly.left += .5
     if butterfly.left > WIDTH:
         butterfly.right = 0
