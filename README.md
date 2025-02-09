@@ -1,6 +1,6 @@
 # Butterfly Game
 
-Teaching Python to my daughter using some of the artwork she created from school
+Teaching Python and pgzero to my amazing daughter by creating a game and using some of the wonderful artwork she created from school
 
 Install
 
@@ -10,6 +10,7 @@ pip3 install pgzero
 
 # Linux
 apt-get install python3-pgzero
+
 
 pip3 install -r requirements.txt
 ```
