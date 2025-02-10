@@ -4,11 +4,11 @@ Teaching Python and pgzero to my amazing daughter by creating a game and using s
 
 ```
 # MacOS
-brew install virtualenv python3-pip
+brew install python3 virtualenv
 pip3 install pgzero
 
 # Linux
-apt-get install python3-pgzero
+apt-get install python3 python3-pip virtualenv python3-pgzero
 
 virtualenv venv
 source venv/bin/activate

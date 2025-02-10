@@ -19,6 +19,10 @@ GREEN = (0, 255, 0)
 BOX = Rect((20, 20), (100, 100))
 
 level = 0
+frames_pause = 0
+frames_pause_result = None
+game_title = True
+game_frame = 0
 
 flower_pos = ()
 flower2_pos = ()
@@ -102,6 +106,8 @@ def level_reset(level):
 
 
 def draw():
+    global game_title
+    global game_frame
     global flower_score
     global level
     total_score = 0
@@ -149,23 +155,47 @@ def draw():
     total_score = get_score(flower_score)
 
     result = check_level(flower_score, total_score)
+    game_frame += 1
 
-    if result:
-        screen.draw.text(
-            'Game Completed',
-            center=(WIDTH // 2, 20),
-            color=CYAN,
-            fontsize=40,
-            fontname="lcd_solid"
-        )
-    else:
-        screen.draw.text(
-            'Level: ' + str(level) + ' Score: ' + str(total_score) + ' Butterfly_pos  ' + str(butterfly.pos),
-            center=(WIDTH // 2, 20),
-            color=CYAN,
-            fontsize=20,
-            fontname="lcd_solid"
-        )
+    # Draw frames to allow Next Level, Game Completed text to show
+    global frames_pause
+    global frames_pause_result
+    if result == "next_level" or result == "game_finished":
+        frames_pause = 50
+        frames_pause_result = result
+
+    if game_title:
+        frames_pause = 10
+        frames_pause_result = "game_title"
+
+    if frames_pause > 0:
+        frames_pause -= 1
+        result = frames_pause_result
+
+    if game_frame > 50:
+        game_title = False
+
+    if game_title:
+        draw_text("Game Start")
+    elif result is None:
+        draw_text('Level: ' + str(level) + ' Score: ' + str(total_score) + ' Butterfly_pos  ' + str(butterfly.pos))
+    elif result == "next_level":
+        draw_text("Next Level")
+    elif result == "game_finished":
+        draw_text("Game Completed")
+    elif result == "new_game":
+        draw_text("New Game")
+
+
+
+def draw_text(text):
+    screen.draw.text(
+        text,
+        center=(WIDTH // 2, 20),
+        color=CYAN,
+        fontsize=20,
+        fontname="lcd_solid"
+    )
 
 
 def add_score(flower_score, flower_key):
@@ -176,24 +206,27 @@ def get_score(flower_score):
     total_score = 0
     for key, value in flower_score.items():
         total_score += value
-    # print(f"DEBUG: check level {flower_score} {total_score}")
     return total_score
 
 
 def check_level(flower_score, total_score):
+    global level
+    global game_frame
     total_flowers = len(flower_score)
     if total_flowers == total_score:
-        print("Level Finished")
-        global level
         if (level < 6):
-            level += 1
+            print("Level Finished")
             time.sleep(1)
+            level += 1
             level_reset(level)
-            return False
+            return "next_level"
         else:
             print("Game Finished")
             time.sleep(1)
-            return True
+            game_frame = 0
+            level = 0
+            print("Restart")
+            return "game_finished"
         
 
 def pause():
